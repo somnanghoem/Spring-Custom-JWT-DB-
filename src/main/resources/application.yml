@@ -1,0 +1,22 @@
+
+server:
+  port: 2020
+  
+spring:
+  datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+        password: Norti@2022$$
+  main:
+    allow-circular-references: true
+        
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  config-location: classpath:mybatis_config.xml
+  
+logging:
+  file:
+    path: logs
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"

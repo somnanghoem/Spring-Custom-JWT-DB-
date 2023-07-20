@@ -1,0 +1,10 @@
+CREATE TABLE ACCESS_TOKEN (
+  userName varchar(50) NOT null DEFAULT '',
+  token varchar(255) NOT null DEFAULT '',
+  issued_date varchar(20) NOT null DEFAULT '',
+  expiration_date varchar(20) NOT null DEFAULT '',
+  remote_ip varchar(255) NOT null DEFAULT '',
+  status varchar(1) NOT null DEFAULT '',
+  userType varchar(2) DEFAULT '',
+   PRIMARY KEY ( userName)
+) 

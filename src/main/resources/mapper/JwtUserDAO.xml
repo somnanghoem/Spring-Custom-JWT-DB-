@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.springsecurity.dao.JwtUserDAO">
+
+	
+	<select id="getRequestTokenByUserName" resultType="DataUtil">
+		<![CDATA[
+			SELECT
+				  USERNAME 			AS "userName"
+				, TOKEN 			AS "token"
+				, ISSUED_DATE 		AS "issueDate"
+				, EXPIRATION_DATE  	AS "expirationDate" 
+				, REMOTE_IP 		AS "remoteIP"
+				, STATUS 			AS "status"
+				, USERTYPE  		AS "userType"
+			FROM PUBLIC.ACCESS_TOKEN
+			WHERE USERNAME = #{userName}
+		]]>
+	</select>
+	
+	<update id="updateUserTokenInfo">
+		<![CDATA[
+			UPDATE PUBLIC.ACCESS_TOKEN
+	           SET
+	               TOKEN             		  = #{token}
+	               , EXPIRATION_DATE		  = #{expirationDate}
+				   , ISSUED_DATE			  = #{issuedDate}
+				   , REMOTE_IP			  	  = #{remoteIP}
+	         WHERE USERNAME                    = #{userName}
+		  ]]>
+	</update>
+	
+	
+	<insert id="registerUserToken">
+		<![CDATA[
+			INSERT  
+			INTO PUBLIC.ACCESS_TOKEN
+	          (
+					USERNAME
+				, TOKEN
+				, ISSUED_DATE
+				, EXPIRATION_DATE
+				, REMOTE_IP
+				, STATUS
+				, USERTYPE
+	         
+	          )
+		     VALUES
+		      (
+				 #{userName}
+				, #{token}
+				, #{issueDate}
+				, #{expirationDate}
+				, #{remoteIP}
+				, '0'
+				, #{userType}
+	          )					
+		]]>
+	</insert>
+
+</mapper>
