@@ -10,6 +10,8 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +29,7 @@ import com.security.springsecurity.util.request.RequestData;
 import com.security.springsecurity.util.response.ResponseData;
 import com.security.springsecurity.util.response.ResponseHeader;
 import com.security.springsecurity.util.resultmessage.ResponseMessageTypeCode;
+import com.security.springsecurity.util.type.YnTypeCode;
 
 /**
  * @author Hoem Somnang
@@ -42,26 +45,38 @@ public class TokenEndPointController {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	private FakeUserInformation fakeUserInformation;
+	private static final Logger logger  = LoggerFactory.getLogger( TokenEndPointController.class);
 	/**
+	 * -- Generate User Token --
+	 *
+	 * @serviceID 
+	 * @logicalName 
 	 * @param requestData
-	 * 			String	userName
+	 * 	 		String	userName
 	 * 			String	password
 	 * 			String	userType
-	 * @return
+	 * @return	outputData
+	 * 			String	token
+	 * 			String	userName
+	 * 			String	issueDate
+	 * 			String	expirationDate
+	 * 			String	role
 	 * @throws Exception
+	 * @exception 
+	 * @fullPath 
 	 */
 	@PostMapping("/")
 	public ResponseData< DataUtil > generateUserToken( @RequestBody RequestData< DataUtil > requestData, HttpServletRequest request ) throws Exception {
 		
-		String successYN = "Y";
 		DataUtil body = new DataUtil();
+		String successYN = YnTypeCode.YES.getValue();
 		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
 		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		try {
 			// Validate request param
 			DataUtil validateData = this.validateGenerateUserTokenParam( requestData );
-			if ( "Y".equals( validateData.getString("validYN")) ) {
+			if ( YnTypeCode.YES.getValue().equals( validateData.getString("validYN")) ) {
 				
 				Date date = new Date(); 
 				String token = StringUtils.EMPTY;
@@ -128,13 +143,15 @@ public class TokenEndPointController {
 				}
 				
 			} else {
-				successYN = "N";
+				successYN = YnTypeCode.NO.getValue();
 				resultCode = validateData.getString("resultCode");
 				resultMessage = validateData.getString("resultMessage");
 			}
 		} catch ( Exception e ) {
+			e.printStackTrace();
+			logger.error(">>>>>>>>>> get token error >>>>>>>>>>" + e.getMessage() );
 			body = new DataUtil();
-			successYN = "N";
+			successYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
 			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
 		}
@@ -151,22 +168,22 @@ public class TokenEndPointController {
 	private DataUtil validateGenerateUserTokenParam( RequestData< DataUtil > requestData ) {
 		
 		DataUtil result = new DataUtil();
-		String validYN = "Y";
+		String validYN = YnTypeCode.YES.getValue();
 		String resultCode = StringUtils.EMPTY;
 		String resultMessage = StringUtils.EMPTY;
 		if ( StringUtils.isBlank( requestData.getBody().getString("userName") )
 				|| StringUtils.isEmpty( requestData.getBody().getString("userName") )  ) {
-			validYN = "N";
+			validYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.USERNAME_EMPTY.getResultCode();
 			resultMessage = ResponseMessageTypeCode.USERNAME_EMPTY.getResultMessage();
 		} else if ( StringUtils.isBlank( requestData.getBody().getString("password") )
 				|| StringUtils.isEmpty( requestData.getBody().getString("password") )  ) {
-			validYN = "N";
+			validYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.PASSWORD_EMPTY.getResultCode();
 			resultMessage = ResponseMessageTypeCode.PASSWORD_EMPTY.getResultMessage();
 		} else if ( StringUtils.isBlank( requestData.getBody().getString("userType") )
 				|| StringUtils.isEmpty( requestData.getBody().getString("userType") )  ) {
-			validYN = "N";
+			validYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.USERTYPE_EMPTY.getResultCode();
 			resultMessage = ResponseMessageTypeCode.USERTYPE_EMPTY.getResultMessage();
 		} else if ( StringUtils.isNoneEmpty( requestData.getBody().getString("userName") ) && StringUtils.isNotEmpty( requestData.getBody().getString("password") ) ) {
@@ -176,7 +193,7 @@ public class TokenEndPointController {
 			try {
 				fakeUserInformation.getUseInfoByUserNamePassword( userParam );
 			} catch ( Exception e ) {
-				validYN = "N";
+				validYN = YnTypeCode.NO.getValue();
 				resultCode = ResponseMessageTypeCode.USER_NOT_FOUND.getResultCode();
 				resultMessage = ResponseMessageTypeCode.USER_NOT_FOUND.getResultMessage();
 			}

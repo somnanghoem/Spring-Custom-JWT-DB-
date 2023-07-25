@@ -24,7 +24,7 @@
 	           SET
 	               TOKEN             		  = #{token}
 	               , EXPIRATION_DATE		  = #{expirationDate}
-				   , ISSUED_DATE			  = #{issuedDate}
+				   , ISSUED_DATE			  = #{issueDate}
 				   , REMOTE_IP			  	  = #{remoteIP}
 	         WHERE USERNAME                    = #{userName}
 		  ]]>

@@ -23,6 +23,7 @@ import com.security.springsecurity.util.response.RenderUtil;
 import com.security.springsecurity.util.response.ResponseData;
 import com.security.springsecurity.util.response.ResponseHeader;
 import com.security.springsecurity.util.resultmessage.ResponseMessageTypeCode;
+import com.security.springsecurity.util.type.YnTypeCode;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
@@ -49,25 +50,25 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 			try {
 				userName = jwtTokenUtil.getUsernameFromToken(jwtToken);
 			} catch (IllegalArgumentException e) {
-				header.setSuccessYN( "N" );
+				header.setSuccessYN( YnTypeCode.NO.getValue() );
 				header.setResultCode(ResponseMessageTypeCode.UNABLE_GET_TOKEN.getResultCode());
 				header.setResultMessage(ResponseMessageTypeCode.UNABLE_GET_TOKEN.getResultMessage());
 				RenderUtil.renderJson( response, new ResponseData< DataUtil >(header, body) );
 				return;
 			} catch ( ExpiredJwtException e) {
-				header.setSuccessYN( "N" );
+				header.setSuccessYN( YnTypeCode.NO.getValue() );
 				header.setResultCode(ResponseMessageTypeCode.TOKEN_EXPIRED.getResultCode());
 				header.setResultMessage(ResponseMessageTypeCode.TOKEN_EXPIRED.getResultMessage());
 				RenderUtil.renderJson( response, new ResponseData<DataUtil>(header, body) );
 				return;
 			}catch (SignatureException e) {
-				header.setSuccessYN( "N" );
+				header.setSuccessYN( YnTypeCode.NO.getValue() );
 				header.setResultCode(ResponseMessageTypeCode.TOKEN_SIGNATURE_DOES_NOT_MATCH.getResultCode());
 				header.setResultMessage(ResponseMessageTypeCode.TOKEN_SIGNATURE_DOES_NOT_MATCH.getResultMessage());
 				RenderUtil.renderJson( response, new ResponseData<DataUtil>(header, body) );
 				return;
 			} catch ( Exception e ) {
-				header.setSuccessYN( "N" );
+				header.setSuccessYN( YnTypeCode.NO.getValue() );
 				header.setResultCode(ResponseMessageTypeCode.TOKEN_SIGNATURE_DOES_NOT_MATCH.getResultCode());
 				header.setResultMessage(ResponseMessageTypeCode.TOKEN_SIGNATURE_DOES_NOT_MATCH.getResultMessage());
 				RenderUtil.renderJson( response, new ResponseData<DataUtil>(header, body) );

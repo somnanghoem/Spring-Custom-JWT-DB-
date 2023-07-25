@@ -1,7 +1,9 @@
 package com.security.springsecurity.util.data;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DataUtil extends LinkedHashMap<String, Object> {
@@ -123,5 +125,26 @@ public class DataUtil extends LinkedHashMap<String, Object> {
 		
 	public void appendFrom( DataUtil data ) {
 		this.putAll( data );
+	}
+	
+	public void setListDataUtil( String key, ListDataUtil value ) {
+		this.put( key, value );
+	}
+	
+	@SuppressWarnings( { "unchecked" } )
+	public ListDataUtil getListDataUtil( String key ) {
+		try {
+			Object obj = get( key );
+			if ( obj instanceof ListDataUtil ) {
+				return (ListDataUtil) obj;
+			} else if ( obj instanceof ArrayList ) {
+				return  new ListDataUtil( (List<LinkedHashMap<String, Object>>) obj );
+			} else {
+				return obj == null ? new ListDataUtil() : (ListDataUtil) obj;
+			}
+		} catch ( Exception e ) {
+			e.printStackTrace();
+		}
+		return new ListDataUtil();
 	}
 }
