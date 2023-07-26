@@ -10,6 +10,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ public class TokenEndPointController {
 		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
 		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 		try {
+			logger.debug(">>>>>>>>>> generate user token start >>>>>>>>>>");
 			// Validate request param
 			DataUtil validateData = this.validateGenerateUserTokenParam( requestData );
 			if ( YnTypeCode.YES.getValue().equals( validateData.getString("validYN")) ) {
@@ -148,13 +150,13 @@ public class TokenEndPointController {
 				resultMessage = validateData.getString("resultMessage");
 			}
 		} catch ( Exception e ) {
-			e.printStackTrace();
-			logger.error(">>>>>>>>>> get token error >>>>>>>>>>" + e.getMessage() );
+			logger.error(">>>>>>>>>> get token error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
 			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
 		}
+		logger.debug(">>>>>>>>>> generate user token end >>>>>>>>>>");
 		// set header
 		ResponseHeader header = new ResponseHeader( successYN, resultCode, resultMessage );
 		return new ResponseData< DataUtil >( header, body );

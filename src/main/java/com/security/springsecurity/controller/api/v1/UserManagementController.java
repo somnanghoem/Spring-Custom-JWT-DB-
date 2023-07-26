@@ -1,5 +1,6 @@
 package com.security.springsecurity.controller.api.v1;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +47,7 @@ public class UserManagementController {
 		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
 		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
 		try {
+			logger.debug(">>>>>>>>>> getUserInformation start >>>>>>>>>>");
 			// Fake Data
 			body.setString("name", "Ching");
 			body.setString("department", "HR");
@@ -55,11 +57,12 @@ public class UserManagementController {
 			
 		} catch ( Exception e ) {
 			e.printStackTrace();
-			logger.error(">>>>>>>>>> retrieve user infor error >>>>>>>>>>" + e.getMessage() );
+			logger.error(">>>>>>>>>> retrieve user infor error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
 			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
 		}
+		logger.debug(">>>>>>>>>> getUserInformation end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
 	}
@@ -90,6 +93,7 @@ public class UserManagementController {
 		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
 		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
 		try {
+			logger.debug(">>>>>>>>>> getListUserInformation start >>>>>>>>>>");
 			// Fake Data
 			ListDataUtil items = new ListDataUtil();
 			DataUtil item = new DataUtil();
@@ -104,11 +108,12 @@ public class UserManagementController {
 			body.setListDataUtil("items", items);
 		} catch ( Exception e ) {
 			e.printStackTrace();
-			logger.error(">>>>>>>>>> retrieve list user infor error >>>>>>>>>>" + e.getMessage() );
+			logger.error(">>>>>>>>>> retrieve list user infor error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
 			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
 		}
+		logger.debug(">>>>>>>>>> getListUserInformation end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
 	}

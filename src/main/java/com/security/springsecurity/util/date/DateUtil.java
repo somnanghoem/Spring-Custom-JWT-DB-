@@ -25,7 +25,7 @@ public class DateUtil {
 	public final static String TIMESTAMP_TYPE1 			= "yyyyMMddHHmm";
 	// Format
 	public final static String FORMAT_DATE 				= "yyyy-MM-dd";
-	public final static String FORMAT_DATETIME 			="yyyy-MM-dd HH:mm:ss";
+	public final static String FORMAT_DATETIME 			= "yyyy-MM-dd HH:mm:ss";
 	public final static String FORMAT_FULL_DATETIME 	= "yyyy-MM-dd HH:mm:ssSSS";
 	public final static String FORMAT_TIME	 			= "HH:mm:ss";
 	public final static String FORMAT_TIMESTAMP 		= "HH:mm:ssSSS";
