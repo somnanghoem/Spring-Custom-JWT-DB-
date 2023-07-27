@@ -18,5 +18,12 @@ mybatis:
 logging:
   file:
     path: logs
+    name: logs/application.log
   pattern:
     file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    com.security.springsecurity.controller: DEBUG
+    com.security.springsecurity.service: DEBUG
+  logback:
+    rollingpolicy:
+      max-history: 1
