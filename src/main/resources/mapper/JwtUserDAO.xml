@@ -38,7 +38,7 @@
 	          (
 					USERNAME
 				, TOKEN
-				, ISSUED_DATEs
+				, ISSUED_DATE
 				, EXPIRATION_DATE
 				, REMOTE_IP
 				, STATUS

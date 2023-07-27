@@ -35,7 +35,7 @@ public class DateUtil {
 	 * @param format
 	 * @return
 	 */
-	public String getCurrentFormatDate( String format ) {
+	public static String getCurrentFormatDate( String format ) {
 		SimpleDateFormat sdf = new SimpleDateFormat( format, new Locale( "en", "US" ) );
 		return sdf.format( Calendar.getInstance().getTime() );
 	}
@@ -47,7 +47,7 @@ public class DateUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public String changeDateFormat( String date, String beforeFormatString, String afterFormatString ) throws Exception {
+	public static String changeDateFormat( String date, String beforeFormatString, String afterFormatString ) throws Exception {
 		try {
 			SimpleDateFormat beforeFormat = new SimpleDateFormat( beforeFormatString );
 			SimpleDateFormat afterFormat = new SimpleDateFormat( afterFormatString, new Locale( "en", "US" ) );
@@ -64,7 +64,7 @@ public class DateUtil {
 	 * @return
 	 * @throws Exception
 	 */
-	public String changeDateFormat( String date, SimpleDateFormat beforeFormat, SimpleDateFormat afterFormat ) throws Exception {
+	public static String changeDateFormat( String date, SimpleDateFormat beforeFormat, SimpleDateFormat afterFormat ) throws Exception {
 		Date tempDate;
 		String changedDate = date;
 		try {
