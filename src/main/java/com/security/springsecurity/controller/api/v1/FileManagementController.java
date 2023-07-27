@@ -4,11 +4,11 @@
  * PROJ : spring-security
  * Copyright 2023
  *-----------------------------------------------------------------------------------------
- *                      H      I      S      T      O      R      Y
+ *				      H      I      S      T      O      R      Y
  *-----------------------------------------------------------------------------------------
- *   DATE        AUTHOR         DESCRIPTION                        
+ *   DATE		AUTHOR		 DESCRIPTION						
  * ----------  --------------  ------------------------------------------------------------
- * 2023-07-26   Hoem Somnang          creation
+ * 2023-07-26   Hoem Somnang		  creation
  *---------------------------------------------------------------------------------------*/
 package com.security.springsecurity.controller.api.v1;
 
@@ -19,8 +19,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -35,6 +38,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,6 +88,13 @@ public class FileManagementController {
 	private final static String EXCEL_BACKUP	 = "backup";
 	private final static String EXCEL_EXTENSION  = "xlsx";
 	private final static String EXCEL_FILE_NAME  = "file";
+	// JSON
+	private final static String JSON_READ		 = "read";
+	private final static String JSON_UPLOAD		 = "upload";
+	private final static String JSON_FOLDER		 = "json";
+	private final static String JSON_BACKUP		 = "backup";
+	private final static String JSON_EXTENSION	 = "json";
+	private final static String JSON_FILE_NAME	 = "file";
 	/**
 	 * -- Read Text File --
 	 *
@@ -460,6 +473,164 @@ public class FileManagementController {
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
 		
+	}
+	
+	
+	/**
+	 * -- Read Json File --
+	 *
+	 * @serviceID 
+	 * @logicalName 
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 * @exception 
+	 * @fullPath 
+	 */
+	@PostMapping("/read-json")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ResponseData<DataUtil> readJsonFile( RequestData<DataUtil> param ) throws Exception {
+		
+		DataUtil body = new DataUtil();
+		String successYN = YnTypeCode.YES.getValue();
+		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
+		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
+		try {
+			logger.error(">>>>>>>>>>> read json file start >>>>>>>>>>");
+			String path = FileUtil.getPath( JSON_FOLDER , JSON_FILE_NAME, JSON_READ);
+			List<File> files = FileReaderUtil.listFilesWithExtension( path, JSON_EXTENSION );
+			if( files.size() > 0 ) {
+				for ( File file: files ) {
+					FileReader fileReader = new FileReader(file);
+					Object obj = new JSONParser().parse( fileReader );
+					// typecasting  obj to JSONObject
+					JSONObject jObj = ( JSONObject ) obj;
+					// Getting Value
+					String firstName = (String) jObj.get("firstName");
+					String lastName  = (String) jObj.get("lastName");
+					long age = (long) jObj.get("age");
+					Map<String, Object> address = ((Map)jObj.get("address") );
+					JSONArray phoneNumbers = ( (JSONArray)jObj.get("phoneNumbers") );
+					// Set OuputData
+					body.setString("firstName", firstName);
+					body.setString("lastName", lastName);
+					body.setLong("age", age);
+					body.set("address", address);
+					body.set("phoneNumbers", phoneNumbers );
+					/*==================================
+					 * Move Excel File To Backup Folder
+					 *==================================*/
+					jObj.clear();
+					fileReader.close();
+					String backupPath = FileUtil.makePath( JSON_FOLDER , JSON_FILE_NAME, JSON_BACKUP);
+					// source path
+					StringBuilder srcPath = new StringBuilder();
+					srcPath.append( path );
+					srcPath.append( File.separator );
+					srcPath.append( file.getName() );
+					String sourceFile = srcPath.toString();
+					// destination path
+					StringBuilder desPath = new StringBuilder();
+					desPath.append( backupPath );
+					desPath.append( File.separator );
+					desPath.append( "backup_" );
+					desPath.append( DateUtil.getCurrentFormatDate( DateUtil.DATETIME ) );
+					desPath.append( "_" );
+					desPath.append( file.getName() );
+					String destinationFile = desPath.toString();
+					/*===========================
+					 * Move File To Backup folder
+					 *===========================*/
+					FileReaderUtil.moveFile(sourceFile, destinationFile);
+				}
+			}
+			
+		} catch ( Exception e ) {
+			logger.error(">>>>>>>>>>> read json file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			body = new DataUtil();
+			successYN = YnTypeCode.NO.getValue();
+			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+		}
+		logger.error(">>>>>>>>>>> read json file end >>>>>>>>>>");
+		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
+		return new ResponseData<DataUtil>(header, body);
+	}
+	
+	
+	/**
+	 * -- Upload Json File --
+	 *
+	 * @serviceID 
+	 * @logicalName 
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 * @exception 
+	 * @fullPath 
+	 */
+	@PostMapping("/upload-json")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ResponseData<DataUtil> uploadJsonFile( RequestData<DataUtil> param ) throws Exception {
+		
+		DataUtil body = new DataUtil();
+		String successYN = YnTypeCode.YES.getValue();
+		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
+		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
+		try {	
+			logger.error(">>>>>>>>>>> upload json file start >>>>>>>>>>");
+			// creating JSONObject
+			JSONObject jo = new JSONObject();
+			// putting data to JSONObject
+			jo.put("firstName", "John");
+			jo.put("lastName", "Smith");
+			jo.put("age", 25);
+			// for address data, first create LinkedHashMap
+			Map m = new LinkedHashMap(4);
+			m.put("streetAddress", "21 2nd Street");
+			m.put("city", "New York");
+			m.put("state", "NY");
+			m.put("postalCode", 10021);
+			// putting address to JSONObject
+			jo.put("address", m);
+			// for phone numbers, first create JSONArray 
+			JSONArray ja = new JSONArray();
+			m = new LinkedHashMap<>(2);
+			m.put("type", "home");
+			m.put("number", "212 555-1234");
+			// adding map to list
+			ja.add(m);
+			m = new LinkedHashMap(2);
+			m.put("type", "fax");
+			m.put("number", "212 555-1234");
+			// adding map to list
+			ja.add(m);
+			// putting phoneNumbers to JSONObject
+			jo.put("phoneNumbers", ja);
+			// writing JSON to file:"JSONExample.json" in cwd
+			String filePath = FileReaderUtil.makePath( JSON_FOLDER, JSON_FILE_NAME, JSON_UPLOAD );
+			String uploadFileName = DateUtil.getCurrentFormatDate( DateUtil.DATETIME ).concat( "_upload" );
+			StringBuilder srcPath = new StringBuilder();
+			srcPath.append( filePath );
+			srcPath.append( File.separator );
+			srcPath.append( uploadFileName );
+			srcPath.append( "." );
+			srcPath.append( JSON_EXTENSION );
+			String uploadFile = srcPath.toString();
+			PrintWriter pw = new PrintWriter( uploadFile );
+			pw.write(jo.toJSONString());
+			pw.flush();
+			pw.close();
+		} catch ( Exception e ) {
+			logger.error(">>>>>>>>>>> upload json file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			body = new DataUtil();
+			successYN = YnTypeCode.NO.getValue();
+			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+		}
+		logger.error(">>>>>>>>>>> upload json file end >>>>>>>>>>");
+		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
+		return new ResponseData<DataUtil>(header, body);
 	}
 	
 	

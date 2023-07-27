@@ -27,8 +27,8 @@ dependencies {
 	// Excel
 	implementation 'org.apache.poi:poi:5.2.2'
 	implementation 'org.apache.poi:poi-ooxml:5.2.2'
-	
-	
+	// JOSN
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 	
 	implementation 'org.apache.commons:commons-lang3:3.5'
 	runtimeOnly 'org.postgresql:postgresql'
