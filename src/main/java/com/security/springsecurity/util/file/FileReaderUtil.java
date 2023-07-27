@@ -211,7 +211,7 @@ public class FileReaderUtil extends FileUtil {
 	 * @exception 
 	 * @fullPath 
 	 */
-	public static void moveToBackupManually( String sourceFile, String destinationFile ) throws Exception {
+	public static void moveFile( String sourceFile, String destinationFile ) throws Exception {
 		try {
 			Files.move( Paths.get( sourceFile ), Paths.get( destinationFile ) );
 		} catch ( Exception e ) {
