@@ -31,6 +31,8 @@ dependencies {
 	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 	// Schedule
 	implementation 'org.springframework.boot:spring-boot-starter-batch:2.6.7'
+	// Telegram 
+	implementation group: 'org.telegram', name: 'telegrambots', version: '5.2.0'
 	
 	implementation 'org.apache.commons:commons-lang3:3.5'
 	runtimeOnly 'org.postgresql:postgresql'
