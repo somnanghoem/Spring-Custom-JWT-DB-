@@ -72,7 +72,7 @@ public class SendTelegramNotificationScheduler {
 			param.setBigDecimal("returnAmount", BigDecimal.valueOf( 25 ) );
 			param.setString("groupName", "@sn_testing" );
 			param.setString("token", "5791659744:AAH-sM4_RUYgeBWbUNtBOXiWHG9lUmvbqF0");
-			sendTelegramNotificationService.sendTelegramMessage(param);
+			//sendTelegramNotificationService.sendTelegramMessage(param);
 			System.out.println(">>>>>>>>> send telegram message end >>>>>>>>>" );
 		} catch ( Exception e) {
 			throw e;

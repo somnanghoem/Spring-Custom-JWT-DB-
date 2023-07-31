@@ -22,7 +22,7 @@ import com.security.springsecurity.util.date.DateUtil;
 public class SendTelegramNotificationServiceImpl implements SendTelegramNotificationService {
 
 	private final static Logger logger = LoggerFactory.getLogger( SendTelegramNotificationServiceImpl.class );
-	
+	RestTemplate restTemplate ;
 	/**
 	 * -- Send Telegram Message --
 	 *
@@ -45,7 +45,7 @@ public class SendTelegramNotificationServiceImpl implements SendTelegramNotifica
 	@Override
 	public DataUtil sendTelegramMessage(DataUtil param ) throws Exception {
 		
-		RestTemplate restTemplate = new RestTemplate();
+		restTemplate = new RestTemplate();
 		
 		try {
 			
@@ -68,18 +68,21 @@ public class SendTelegramNotificationServiceImpl implements SendTelegramNotifica
 					? new DecimalFormat( "###,##0.00" ).format( param.getBigDecimal("returnAmount") )
 					: new DecimalFormat( "###,##0" ).format( param.getBigDecimal("returnAmount") );
 					
-			String message = String.format(   "Order Completed\nInvoice No : %s\n"
-											+ "Amount: %s%s\n"
-											+ "Cash Amount: %s "
-											+ "Return Amount: %s\n"
-											+ "Transaction Date: %s  "
+			String message = String.format(   "Order Completed\n"
+											+ "Invoice No : %s\n"
+											+ "Amount: %s %s\n"
+											+ "Cash Amount: %s %s\n"
+											+ "Return Amount: %s %s\n"
+											+ "Transaction Date: %s\n"
 											+ "time: %s\n"
 											+ "Order by: %s"
 											, invoiceNo
 											, transactionAmountFormat
 											, param.getString( "transactionCurrencyCode" )
 											, cashAmount
+											, param.getString( "transactionCurrencyCode" )
 											, returnAmount
+											, param.getString( "transactionCurrencyCode" )
 											, transactionDate 
 											, time
 											, cashierName );
