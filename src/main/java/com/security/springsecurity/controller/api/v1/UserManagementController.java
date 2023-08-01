@@ -56,7 +56,6 @@ public class UserManagementController {
 			body.setString("email", "ching@hr.com.kh");
 			
 		} catch ( Exception e ) {
-			e.printStackTrace();
 			logger.error(">>>>>>>>>> retrieve user infor error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
@@ -107,7 +106,6 @@ public class UserManagementController {
 			}
 			body.setListDataUtil("items", items);
 		} catch ( Exception e ) {
-			e.printStackTrace();
 			logger.error(">>>>>>>>>> retrieve list user infor error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
 			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();

@@ -14,7 +14,12 @@ public enum ResponseMessageTypeCode {
 	USER_NOT_FOUND		( "0008", "User not found"),
 	UNABLE_GET_TOKEN	( "0009", "Unable to get token. Please try again."),
 	TOKEN_EXPIRED		( "0010", "Token has expired."),
-	TOKEN_SIGNATURE_DOES_NOT_MATCH( "0011", "Token signature does not match locally computed signature. Token validity cannot be asserted and should not be trusted.");
+	TOKEN_SIGNATURE_DOES_NOT_MATCH( "0011", "Token signature does not match locally computed signature. Token validity cannot be asserted and should not be trusted."),
+	SEQUENCE_CODE_EMPTY ( "0012", "Sequence code cannot be empty or null "),
+	SEQUENCE_UNIQUE_CODE_EMPTY ( "0013", "Sequence unique code cannot be empty or null "),
+	SEQUENCE_CODE_ERROR ( "0014", "Register sequence master error" ),
+	SEQUENCE_CODE_DETIAL_ERROR ( "0015", "Register sequence detail error" ),
+	SEQUENCE_CODE_NAME_EMPTY ( "0016", "Sequence code name cannot be empty or null" );
 	
 	private String resultCode;
 	private String resultMessage;
@@ -42,7 +47,7 @@ public enum ResponseMessageTypeCode {
 	 * @param resultCode
 	 * @return
 	 */
-	public ResponseMessageTypeCode getResultMessage( String resultCode ) {
+	public static ResponseMessageTypeCode getResultMessage( String resultCode ) {
 		
 		ResponseMessageTypeCode resultConst = null;
 		if ( resultCode != null ) {

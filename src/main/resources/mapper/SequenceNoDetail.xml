@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.springsecurity.dao.SequenceNoDetail">
+
+	<select id="retrieveSequenceNoDetailInfo" resultType="DataUtil">
+		<![CDATA[
+			SELECT 
+				  SEQNO_CODE		AS "seqNoCode"			
+				, SEQNO_UNIQUE_CODE	AS "seqNoUniqueCode"
+				, SEQNO_LAST		AS "seqNoLast"	
+				, CREATE_BY			AS "createBy"
+				, REGISTER_DATE 	AS "registerDate"
+				, REGISTER_TIME 	AS "registerTime"
+				, UPDATE_DATE 		AS "updateDate"
+				, UPDATE_TIME 		AS "updateTime"
+				, UPDATE_BY			AS "updateBy"	
+			FROM SEQUENCE_DETAIL
+				WHERE  SEQNO_CODE = #{seqNoCode}		
+					AND SEQNO_UNIQUE_CODE = #{seqNoUniqueCode}
+		]]>
+	</select>
+	
+	<insert id="regsiterSequenceNoDetailInfo">
+		<![CDATA[
+			INSERT INTO SEQUENCE_DETAIL
+				(  
+				  SEQNO_CODE				
+				, SEQNO_UNIQUE_CODE	
+				, SEQNO_LAST		
+				, CREATE_BY			
+				, REGISTER_DATE 	
+				, REGISTER_TIME 	
+				, UPDATE_DATE 		
+				, UPDATE_TIME 		
+				, UPDATE_BY			
+			) 
+			values(
+			 	  #{seqNoCode}		
+				, #{seqNoUniqueCode}
+				, #{seqNoLast}
+				, #{createBy}
+				, #{registerDate}
+				, #{registerTime}
+				, #{updateDate}
+				, #{updateTime}
+				, #{updateBy}
+			)
+		]]>
+	</insert>
+	
+	<update id="updateSequenceNoDetailInfo">
+	<![CDATA[
+		UPDATE SEQUENCE_DETAIL
+			SET SEQNO_LAST	= #{seqNoLast}	
+			, UPDATE_DATE 	= #{updateDate}	
+			, UPDATE_TIME 	= #{updateTime}	
+			, UPDATE_BY		= #{updateBy}	
+		WHERE  SEQNO_CODE = #{seqNoCode}		
+			AND SEQNO_UNIQUE_CODE = #{seqNoUniqueCode}
+		]]>
+	</update>
+
+</mapper>

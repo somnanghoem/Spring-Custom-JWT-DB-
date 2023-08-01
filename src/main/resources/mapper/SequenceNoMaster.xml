@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.springsecurity.dao.SequenceNoMaster">
+
+	<select id="retrieveSequenceMasterInfo" resultType="DataUtil">
+		<![CDATA[
+			SELECT 
+					  SEQNO_CODE		AS "seqNoCode"	
+					, SEQNO_STATUS		AS "seqNoStatus"
+					, SEQNO_NAME		AS "seqNoName"
+					, SEQNO_DIGIT		AS "seqNoDigit"
+					, SEQNO_START		AS "seqNoStart"
+					, SEQNO_END			AS "seqNoEnd"
+					, CREATE_BY			AS "createBy"
+					, REGISTER_DATE 	AS "registerDate"
+					, REGISTER_TIME 	AS "registerTime"
+					, UPDATE_DATE 		AS "updateDate"
+					, UPDATE_TIME 		AS "updateTime"
+					, UPDATE_BY			AS "updateBy"
+			FROM SEQUENCE_NO
+				WHERE SEQNO_STATUS = '01' -- 01 NORMAL, 00: DELETE
+					AND SEQNO_CODE = #{seqNoCode}
+		]]>
+	</select>
+	
+	<insert id="regsiterSequenceMasterInfo">
+		<![CDATA[
+			INSERT INTO  SEQUENCE_NO 
+			(
+ 					  SEQNO_CODE		
+					, SEQNO_STATUS		
+					, SEQNO_NAME		
+					, SEQNO_DIGIT		
+					, SEQNO_START		
+					, SEQNO_END			
+					, CREATE_BY			
+					, REGISTER_DATE 	
+					, REGISTER_TIME 	
+					, UPDATE_DATE 		
+					, UPDATE_TIME 		
+					, UPDATE_BY			
+			) 
+			VALUES( 
+  				  #{seqNoCode}		
+				, #{seqNoStatus}
+				, #{seqNoName}
+				, #{seqNoDigit}
+				, #{seqNoStart}
+				, #{seqNoEnd}
+				, #{createBy}
+				, #{registerDate}
+				, #{registerTime}
+				, #{updateDate}
+				, #{updateTime}
+				, #{updateBy}
+			)
+		]]>
+	</insert>
+
+</mapper>
