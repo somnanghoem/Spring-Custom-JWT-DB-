@@ -26,4 +26,4 @@ logging:
     com.security.springsecurity.service: DEBUG
   logback:
     rollingpolicy:
-      max-history: 1
+      max-history: 7

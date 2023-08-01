@@ -12,8 +12,10 @@
  *---------------------------------------------------------------------------------------*/
 package com.security.springsecurity.controller.api.v1;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -24,6 +26,8 @@ import java.math.BigDecimal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -95,6 +99,14 @@ public class FileManagementController {
 	private final static String JSON_BACKUP		 = "backup";
 	private final static String JSON_EXTENSION	 = "json";
 	private final static String JSON_FILE_NAME	 = "file";
+	// Image
+	private final static String IMAGE_READ		 = "read";
+	private final static String IMAGE_UPLOAD	 = "upload";
+	private final static String IMAGE_FOLDER	 = "image";
+	private final static String IMAGE_BACKUP	 = "backup";
+	private final static String IMAGE_EXTENSION	 = "jpg";
+	private final static String IMAGE_FILE_NAME	 = "file";
+	
 	/**
 	 * -- Read Text File --
 	 *
@@ -629,6 +641,92 @@ public class FileManagementController {
 			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
 		}
 		logger.error(">>>>>>>>>>> upload json file end >>>>>>>>>>");
+		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
+		return new ResponseData<DataUtil>(header, body);
+	}
+	
+	
+	/**
+	 * -- detail description --
+	 *
+	 * @serviceID 
+	 * @logicalName 
+	 * @param param
+	 * @return
+	 * @throws Exception
+	 * @exception 
+	 * @fullPath 
+	 */
+	@SuppressWarnings("resource")
+	@PostMapping("/read-upload-image")
+	public ResponseData<DataUtil> readUploadImage( RequestData<DataUtil> param ) throws Exception {
+		
+		DataUtil body = new DataUtil();
+		String successYN = YnTypeCode.YES.getValue();
+		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
+		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
+		try {
+			logger.error(">>>>>>>>>>> Read Upload Image file start >>>>>>>>>>");
+			/*==============================
+			 * 		Read File From Folder
+			 *==============================*/
+			String path = FileUtil.getPath( IMAGE_FOLDER , IMAGE_FILE_NAME, IMAGE_READ);
+			List<File> files = FileReaderUtil.listFilesWithExtension( path, IMAGE_EXTENSION );
+			if( files.size() > 0 ) {
+				for ( File file: files ) {
+					
+					BufferedImage bImg = ImageIO.read( new File( file.getAbsolutePath() ) );
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write( bImg, "jpg", baos);
+					byte[] bytes = baos.toByteArray();
+					String base64 = FileUtil.byteToBase64(bytes);
+					body.set( "bytes", bytes );
+					body.set( " base64",  base64 );
+					
+					String backupPath = FileUtil.makePath( IMAGE_FOLDER , IMAGE_FILE_NAME, IMAGE_BACKUP);
+					// source path
+					StringBuilder srcPath = new StringBuilder();
+					srcPath.append( path );
+					srcPath.append( File.separator );
+					srcPath.append( file.getName() );
+					String sourceFile = srcPath.toString();
+					// destination path
+					StringBuilder desPath = new StringBuilder();
+					desPath.append( backupPath );
+					desPath.append( File.separator );
+					desPath.append( "backup_" );
+					desPath.append( DateUtil.getCurrentFormatDate( DateUtil.DATETIME ) );
+					desPath.append( "_" );
+					desPath.append( file.getName() );
+					String destinationFile = desPath.toString();
+					/*===========================
+					 * Move File To Backup folder
+					 *===========================*/
+					FileReaderUtil.moveFile(sourceFile, destinationFile);
+					/*===========================
+					 * 	Upload File To Folder
+					 *===========================*/
+					String filePath = FileReaderUtil.makePath( IMAGE_FOLDER, IMAGE_FILE_NAME, IMAGE_UPLOAD );
+					String uploadFileName = DateUtil.getCurrentFormatDate( DateUtil.DATETIME ).concat( "_upload" );
+					StringBuilder uploadPath = new StringBuilder();
+					uploadPath.append( filePath );
+					uploadPath.append( File.separator );
+					uploadPath.append( uploadFileName );
+					uploadPath.append( "." );
+					uploadPath.append( IMAGE_EXTENSION );
+					String uploadFile = uploadPath.toString();
+					new FileOutputStream( uploadFile ).write( bytes );
+				}
+			}
+			
+		} catch ( Exception e) {
+			logger.error(">>>>>>>>>>> Read Upload Image file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			body = new DataUtil();
+			successYN = YnTypeCode.NO.getValue();
+			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+		}
+		logger.error(">>>>>>>>>>> Read Upload Image file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
 	}

@@ -13,6 +13,9 @@
 package com.security.springsecurity.util.file;
 
 import java.io.File;
+import java.util.Base64;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
 * <PRE>
@@ -85,5 +88,53 @@ public class FileUtil {
 			file.mkdirs();
 		}
 		return file.getPath();
+	}
+	
+	/**
+	 * -- detail description --
+	 *
+	 * @serviceID 
+	 * @logicalName 
+	 * @param obj
+	 * @return
+	 * @exception 
+	 * @fullPath 
+	 */
+	public static String byteToBase64( Object obj ) {
+		String result = "";
+		if ( obj == null ) {
+			return result;
+		}
+		try {
+			byte[] bytea = (byte[]) obj;
+			result = Base64.getEncoder().encodeToString(bytea);
+		} catch ( Exception e ) {
+			// skipped
+		}
+		return result;
+	}
+	
+	/**
+	 * -- detail description --
+	 *
+	 * @serviceID 
+	 * @logicalName 
+	 * @param base64String
+	 * @return
+	 * @exception 
+	 * @fullPath 
+	 */
+	public static byte[] Base64ToByte( String base64String ) {
+		byte[] result = null;
+		
+		if ( StringUtils.isEmpty( base64String ) ) {
+			return result;
+		}
+		try {
+			result = Base64.getDecoder().decode( base64String );
+		} catch ( Exception e ) {
+			// skipped
+		}
+		return result;
 	}
 }
