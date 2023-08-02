@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.security.springsecurity.controller.token;
+package com.security.springsecurity.controller.token.v1;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

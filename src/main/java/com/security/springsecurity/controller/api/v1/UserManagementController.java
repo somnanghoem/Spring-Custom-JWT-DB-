@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.springsecurity.controller.token.TokenEndPointController;
+import com.security.springsecurity.controller.token.v1.TokenEndPointController;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.data.ListDataUtil;
 import com.security.springsecurity.util.request.RequestData;

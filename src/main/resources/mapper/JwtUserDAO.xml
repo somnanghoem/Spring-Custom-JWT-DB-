@@ -13,14 +13,14 @@
 				, REMOTE_IP 		AS "remoteIP"
 				, STATUS 			AS "status"
 				, USERTYPE  		AS "userType"
-			FROM PUBLIC.ACCESS_TOKEN
+			FROM PUBLIC.JWT_TOKEN
 			WHERE USERNAME = #{userName}
 		]]>
 	</select>
 	
 	<update id="updateUserTokenInfo">
 		<![CDATA[
-			UPDATE PUBLIC.ACCESS_TOKEN
+			UPDATE PUBLIC.JWT_TOKEN
 	           SET
 	               TOKEN             		  = #{token}
 	               , EXPIRATION_DATE		  = #{expirationDate}
@@ -34,7 +34,7 @@
 	<insert id="registerUserToken">
 		<![CDATA[
 			INSERT  
-			INTO PUBLIC.ACCESS_TOKEN
+			INTO PUBLIC.JWT_TOKEN
 	          (
 					USERNAME
 				, TOKEN
