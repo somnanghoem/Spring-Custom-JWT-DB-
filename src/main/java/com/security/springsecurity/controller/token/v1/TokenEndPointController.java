@@ -75,62 +75,42 @@ public class TokenEndPointController {
 		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
 		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
 		try {
+			
 			logger.debug(">>>>>>>>>> generate user token start >>>>>>>>>>");
 			// Validate request param
 			DataUtil validateData = this.validateGenerateUserTokenParam( requestData );
-			if ( YnTypeCode.YES.getValue().equals( validateData.getString("validYN")) ) {
+			Date date = new Date(); 
+			String token = StringUtils.EMPTY;
+			String ipAddress = request.getHeader("X-FORWARDED-FOR");  
+			if (ipAddress == null) {  
+				ipAddress = request.getRemoteAddr();  
+			}
+			SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMddHHmmss");  
+			
+			DataUtil userInfo = validateData.getDataUtil("userInfo");
+			DataUtil userTokenInfo = jwtUserDAO.getRequestTokenByUserName( requestData.getBody().getString("userName") );
+			// Validate User Password // 
+			String password = Sha256Util.encrypt( requestData.getBody().getString("password"), requestData.getBody().getString("userName") );
+			if ( !userInfo.getString("userPassword").equals( password ) ) {
+				throw new Exception( ResponseMessageTypeCode.USER_PASSWORD_INVLIAD.getResultCode() );
+			}
+			UserDetails userDetails = new User( requestData.getBody().getString("userName") ,  password , new ArrayList<>() );
+			if ( userTokenInfo != null ) {
+				long currentDateTime = Long.parseLong( dateFormatter.format( date ) );
+				long tokenExpiredDateTime = Long.parseLong( userTokenInfo.getString("expirationDate") );
+				long expired = currentDateTime - tokenExpiredDateTime;
 				
-				Date date = new Date(); 
-				String token = StringUtils.EMPTY;
-				String ipAddress = request.getHeader("X-FORWARDED-FOR");  
-				if (ipAddress == null) {  
-					ipAddress = request.getRemoteAddr();  
+				// in case token not yet expire
+				if ( expired < 0 ) {
+					token = userTokenInfo.getString("token");
+					body.setString("token", token );
+					body.setString("userName", userTokenInfo.getString("userName") );
+					body.setString("issueDate", userTokenInfo.getString("issueDate") );
+					body.setString("expirationDate", userTokenInfo.getString("expirationDate") );
+					body.setString("role", StringUtils.EMPTY );
 				}
-				SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMddHHmmss");  
-				
-				DataUtil userInfo = validateData.getDataUtil("userInfo");
-				DataUtil userTokenInfo = jwtUserDAO.getRequestTokenByUserName( requestData.getBody().getString("userName") );
-				// Validate User Password // 
-				String password = Sha256Util.encrypt( requestData.getBody().getString("password"), requestData.getBody().getString("userName") );
-				if ( !userInfo.getString("userPassword").equals( password ) ) {
-					throw new Exception( ResponseMessageTypeCode.USER_PASSWORD_INVLIAD.getResultCode() );
-				}
-				
-				UserDetails userDetails = new User( requestData.getBody().getString("userName") ,  password , new ArrayList<>() );
-				if ( userTokenInfo != null ) {
-					long currentDateTime = Long.parseLong( dateFormatter.format( date ) );
-					long tokenExpiredDateTime = Long.parseLong( userTokenInfo.getString("expirationDate") );
-					long expired = currentDateTime - tokenExpiredDateTime;
-					
-					// in case token not yet expire
-					if ( expired < 0 ) {
-						token = userTokenInfo.getString("token");
-						body.setString("token", token );
-						body.setString("userName", userTokenInfo.getString("userName") );
-						body.setString("issueDate", userTokenInfo.getString("issueDate") );
-						body.setString("expirationDate", userTokenInfo.getString("expirationDate") );
-						body.setString("role", StringUtils.EMPTY );
-					}
-					// in case token expired
-					else {
-						token = jwtTokenUtil.generateToken(userDetails);
-						body.setString("token", token );
-						body.setString("userName", jwtTokenUtil.getUsernameFromToken(token) );
-						body.setString("issueDate", dateFormatter.format(jwtTokenUtil.getIssuedAtDateFromToken(token)) );
-						body.setString("expirationDate", dateFormatter.format(jwtTokenUtil.getExpirationDateFromToken(token)) );
-						body.setString("role", StringUtils.EMPTY );
-						// data update
-						DataUtil userTokenUpdate = new DataUtil();
-						userTokenUpdate.setString("token", token );
-						userTokenUpdate.setString("userName", jwtTokenUtil.getUsernameFromToken(token) );
-						userTokenUpdate.setString("issueDate", dateFormatter.format(jwtTokenUtil.getIssuedAtDateFromToken(token)) );
-						userTokenUpdate.setString("expirationDate", dateFormatter.format(jwtTokenUtil.getExpirationDateFromToken(token)) );
-						userTokenUpdate.setString("remoteIP", ipAddress );
-						//Update Token Info
-						jwtUserDAO.updateUserTokenInfo( userTokenUpdate );
-					}
-				} else {
-					
+				// in case token expired
+				else {
 					token = jwtTokenUtil.generateToken(userDetails);
 					body.setString("token", token );
 					body.setString("userName", jwtTokenUtil.getUsernameFromToken(token) );
@@ -138,22 +118,35 @@ public class TokenEndPointController {
 					body.setString("expirationDate", dateFormatter.format(jwtTokenUtil.getExpirationDateFromToken(token)) );
 					body.setString("role", StringUtils.EMPTY );
 					// data update
-					DataUtil userTokenRegister = new DataUtil();
-					userTokenRegister.setString("token", token );
-					userTokenRegister.setString("userName", jwtTokenUtil.getUsernameFromToken(token) );
-					userTokenRegister.setString("issueDate", dateFormatter.format(jwtTokenUtil.getIssuedAtDateFromToken(token)) );
-					userTokenRegister.setString("expirationDate", dateFormatter.format(jwtTokenUtil.getExpirationDateFromToken(token)) );
-					userTokenRegister.setString("remoteIP", ipAddress );
-					userTokenRegister.setString("userType", "01" );
+					DataUtil userTokenUpdate = new DataUtil();
+					userTokenUpdate.setString("token", token );
+					userTokenUpdate.setString("userName", jwtTokenUtil.getUsernameFromToken(token) );
+					userTokenUpdate.setString("issueDate", dateFormatter.format(jwtTokenUtil.getIssuedAtDateFromToken(token)) );
+					userTokenUpdate.setString("expirationDate", dateFormatter.format(jwtTokenUtil.getExpirationDateFromToken(token)) );
+					userTokenUpdate.setString("remoteIP", ipAddress );
 					//Update Token Info
-					jwtUserDAO.registerUserToken( userTokenRegister );
+					jwtUserDAO.updateUserTokenInfo( userTokenUpdate );
 				}
-				
 			} else {
-				successYN = YnTypeCode.NO.getValue();
-				resultCode = validateData.getString("resultCode");
-				resultMessage = validateData.getString("resultMessage");
+				
+				token = jwtTokenUtil.generateToken(userDetails);
+				body.setString("token", token );
+				body.setString("userName", jwtTokenUtil.getUsernameFromToken(token) );
+				body.setString("issueDate", dateFormatter.format(jwtTokenUtil.getIssuedAtDateFromToken(token)) );
+				body.setString("expirationDate", dateFormatter.format(jwtTokenUtil.getExpirationDateFromToken(token)) );
+				body.setString("role", StringUtils.EMPTY );
+				// data update
+				DataUtil userTokenRegister = new DataUtil();
+				userTokenRegister.setString("token", token );
+				userTokenRegister.setString("userName", jwtTokenUtil.getUsernameFromToken(token) );
+				userTokenRegister.setString("issueDate", dateFormatter.format(jwtTokenUtil.getIssuedAtDateFromToken(token)) );
+				userTokenRegister.setString("expirationDate", dateFormatter.format(jwtTokenUtil.getExpirationDateFromToken(token)) );
+				userTokenRegister.setString("remoteIP", ipAddress );
+				userTokenRegister.setString("userType", "01" );
+				//Update Token Info
+				jwtUserDAO.registerUserToken( userTokenRegister );
 			}
+			
 		} catch ( Exception e ) {
 			logger.error(">>>>>>>>>> get token error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
@@ -175,31 +168,28 @@ public class TokenEndPointController {
 	}
 	
 	/**
+	 * -- detail description --
+	 *
+	 * @serviceID 
+	 * @logicalName 
 	 * @param requestData
 	 * @return
+	 * @throws Exception
+	 * @exception 
+	 * @fullPath 
 	 */
-	private DataUtil validateGenerateUserTokenParam( RequestData< DataUtil > requestData ) {
-		
+	private DataUtil validateGenerateUserTokenParam( RequestData< DataUtil > requestData ) throws Exception {
 		DataUtil result = new DataUtil();
 		DataUtil userInfo = new DataUtil();
-		String validYN = YnTypeCode.YES.getValue();
-		String resultCode = StringUtils.EMPTY;
-		String resultMessage = StringUtils.EMPTY;
 		if ( StringUtils.isBlank( requestData.getBody().getString("userName") )
 				|| StringUtils.isEmpty( requestData.getBody().getString("userName") )  ) {
-			validYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.USERNAME_EMPTY.getResultCode();
-			resultMessage = ResponseMessageTypeCode.USERNAME_EMPTY.getResultMessage();
+			throw new Exception( ResponseMessageTypeCode.USERNAME_EMPTY.getResultCode() );
 		} else if ( StringUtils.isBlank( requestData.getBody().getString("password") )
 				|| StringUtils.isEmpty( requestData.getBody().getString("password") )  ) {
-			validYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.PASSWORD_EMPTY.getResultCode();
-			resultMessage = ResponseMessageTypeCode.PASSWORD_EMPTY.getResultMessage();
+			throw new Exception( ResponseMessageTypeCode.PASSWORD_EMPTY.getResultCode() );
 		} else if ( StringUtils.isBlank( requestData.getBody().getString("userType") )
 				|| StringUtils.isEmpty( requestData.getBody().getString("userType") )  ) {
-			validYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.USERTYPE_EMPTY.getResultCode();
-			resultMessage = ResponseMessageTypeCode.USERTYPE_EMPTY.getResultMessage();
+			throw new Exception( ResponseMessageTypeCode.USERTYPE_EMPTY.getResultCode() );
 		} else if ( StringUtils.isNoneEmpty( requestData.getBody().getString("userName") ) && StringUtils.isNotEmpty( requestData.getBody().getString("password") ) 
 				&& StringUtils.isNotEmpty( requestData.getBody().getString("userType") ) ) {
 			DataUtil userParam = new DataUtil();
@@ -209,14 +199,9 @@ public class TokenEndPointController {
 			try {
 				userInfo = userInfoManagementService.getUseInfoByUserInfo( userParam );
 			} catch ( Exception e ) {
-				validYN = YnTypeCode.NO.getValue();
-				resultCode = ResponseMessageTypeCode.USER_NOT_FOUND.getResultCode();
-				resultMessage = ResponseMessageTypeCode.USER_NOT_FOUND.getResultMessage();
+				throw new Exception( ResponseMessageTypeCode.USER_NOT_FOUND.getResultCode() );
 			}
 		}
-		result.setString("validYN", validYN);
-		result.setString("resultCode", resultCode);
-		result.setString("resultMessage", resultMessage);
 		result.setDataUtil("userInfo", userInfo);
 		return result;
 	}
