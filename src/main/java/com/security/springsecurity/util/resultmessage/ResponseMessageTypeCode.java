@@ -19,7 +19,11 @@ public enum ResponseMessageTypeCode {
 	SEQUENCE_UNIQUE_CODE_EMPTY ( "0013", "Sequence unique code cannot be empty or null "),
 	SEQUENCE_CODE_ERROR ( "0014", "Register sequence master error" ),
 	SEQUENCE_CODE_DETIAL_ERROR ( "0015", "Register sequence detail error" ),
-	SEQUENCE_CODE_NAME_EMPTY ( "0016", "Sequence code name cannot be empty or null" );
+	SEQUENCE_CODE_NAME_EMPTY ( "0016", "Sequence code name cannot be empty or null" ),
+	REGISTER_MENU_MASTER_ERROR( "0017", "Register menu master error"),
+	MENU_CODE_EMPTY ( "0018", "Menu code cannot be empty or null"),
+	MENU_DESCRIPTION_EMPTY ( "0019", "Menu description cannot be empty or null"),
+	MENU_URL_EMPTY ( "0020", "Menu URL cannot be empty or null");
 	
 	private String resultCode;
 	private String resultMessage;

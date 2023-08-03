@@ -12,6 +12,10 @@
  *---------------------------------------------------------------------------------------*/
 package com.security.springsecurity.service.v1.web;
 
+import org.springframework.stereotype.Service;
+
+import com.security.springsecurity.util.data.DataUtil;
+
 /**
 * <PRE>
 *  -- detail description --
@@ -20,9 +24,9 @@ package com.security.springsecurity.service.v1.web;
 * @logicalName MenuMasterManagementService
 * @version   0.1, 2023-08-02
 */
-
+@Service
 public interface MenuMasterManagementService {
 	
-	
+	public DataUtil registerMenuMasterInfo( DataUtil param ) throws Exception;
 
 }

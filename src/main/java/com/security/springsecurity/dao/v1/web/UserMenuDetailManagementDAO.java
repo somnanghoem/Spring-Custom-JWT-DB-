@@ -14,6 +14,8 @@ package com.security.springsecurity.dao.v1.web;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.security.springsecurity.util.data.DataUtil;
+
 /**
 * <PRE>
 *  -- detail description --
@@ -23,8 +25,8 @@ import org.apache.ibatis.annotations.Mapper;
 * @version   0.1, 2023-08-02
 */
 @Mapper
-public class UserMenuDetailManagementDAO {
+public interface UserMenuDetailManagementDAO {
 
-	
+	public long registerMenuMasterInfo( DataUtil param ) throws Exception;
 	
 }

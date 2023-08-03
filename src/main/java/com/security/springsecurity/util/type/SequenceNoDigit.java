@@ -25,6 +25,7 @@ public enum SequenceNoDigit {
 
 	FOUR( 4L ),
 	EIGHT( 8L ),
+	TEN( 10L ),
 	SIXTEEN( 16L );
 	
 	private long value;

@@ -23,7 +23,8 @@ package com.security.springsecurity.util.type;
 
 public enum SequenceCodeName {
 	
-	TELEGRAM_SEQNO( "TLG001", "Telegram SequenceNo");
+	TELEGRAM_SEQNO( "TLG001", "Telegram SequenceNo"),
+	MENU_MASTER_SEQNO( "MNU001", "Menu Master SequenceNo");
 	
 	private String name;
 	private String code;

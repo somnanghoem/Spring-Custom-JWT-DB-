@@ -29,8 +29,8 @@ import com.security.springsecurity.util.data.ListDataUtil;
 @Mapper
 public interface MenuMasterManagementDAO {
 	public long registerMenuMasterInfo( DataUtil param );
-	public long updateMenuMasterInfo( DataUtil param );
+	/*public long updateMenuMasterInfo( DataUtil param );
 	public DataUtil retrieveMenuMasterInfo( DataUtil param );
-	public ListDataUtil retrieveListMenuMasterInfo( DataUtil param );
+	public ListDataUtil retrieveListMenuMasterInfo( DataUtil param );*/
 
 }

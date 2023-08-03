@@ -49,6 +49,9 @@ CREATE TABLE SEQUENCE_DETAIL (
 )
 
 
+4. User Table
+
+
 4. Menu Master 
 
 CREATE TABLE MENU_MASTER (
@@ -65,3 +68,11 @@ CREATE TABLE MENU_MASTER (
 	UPDATE_BY			VARCHAR(50) 	NOT NULL, -- USER THAT UPDATE
 	CONSTRAINT PK_MENU_MASTER PRIMARY KEY ( MENU_SEQNO )
 )
+
+SAMPLE DATA
+INSERT INTO public.menu_master
+(menu_seqno, menu_code, menu_description, menu_url, use_yn, create_by, register_date, register_time, update_date, update_time, update_by)
+VALUES(10, 'USER001', 'User Information', 'User Information => List User', 'Y', 'system', '20230802', '170032', '20230802', '170032', 'system');
+INSERT INTO public.menu_master
+(menu_seqno, menu_code, menu_description, menu_url, use_yn, create_by, register_date, register_time, update_date, update_time, update_by)
+VALUES(11, 'USER002', 'User Information', 'User Information => Update User', 'Y', 'system', '20230802', '170112', '20230802', '170112', 'system');
