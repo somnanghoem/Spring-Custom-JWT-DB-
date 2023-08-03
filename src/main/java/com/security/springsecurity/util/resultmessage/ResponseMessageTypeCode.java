@@ -23,7 +23,9 @@ public enum ResponseMessageTypeCode {
 	REGISTER_MENU_MASTER_ERROR( "0017", "Register menu master error"),
 	MENU_CODE_EMPTY ( "0018", "Menu code cannot be empty or null"),
 	MENU_DESCRIPTION_EMPTY ( "0019", "Menu description cannot be empty or null"),
-	MENU_URL_EMPTY ( "0020", "Menu URL cannot be empty or null");
+	MENU_URL_EMPTY ( "0020", "Menu URL cannot be empty or null"),
+	REGISTER_USER_INFO_ERROR( "0021", "Register user information error"),
+	USER_PASSWORD_INVLIAD ( "0022", "Invalid user password");
 	
 	private String resultCode;
 	private String resultMessage;

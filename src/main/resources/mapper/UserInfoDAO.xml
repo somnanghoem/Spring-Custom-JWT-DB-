@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.security.springsecurity.dao.UserInfoDAO">
+
+	<insert id="registerUserInfo">
+		<![CDATA[
+			INSERT INTO USER_INFO (
+				  USER_NAME 			
+				, USER_TYPE 				
+				, USER_STATUS 			
+				, USER_PASSWORD 			
+				, PASSWORD_CHANGE_DATE 	
+				, PASSWORD_CHANGE_TIME 	
+				, FIRST_LOGIN_DATE 		
+				, FIRST_LOGIN_TIME 		
+				, LAST_LOGIN_DATE 		 
+				, LAST_LOGIN_TIME 		
+				, MASTER_USER_NAME 		
+				, EMPLOYEE_ID				
+				, CREATE_BY				
+				, REGISTER_DATE 			
+				, REGISTER_TIME 			
+				, UPDATE_DATE 			
+				, UPDATE_TIME 			
+				, UPDATE_BY				
+			)
+			VALUES (
+				  #{userName} 				
+				, #{userType} 				
+				, #{userStatus} 			
+				, #{userPassword}
+				, COALESCE( #{passwordChangeDate}, '' ) 	
+				, COALESCE( #{passwordChangeTime}, '' ) 	 
+				, COALESCE( #{firstLoginDate}, '' ) 		 
+				, COALESCE( #{firstLoginTime}, '' ) 		
+				, COALESCE( #{lastLoginDate}, '' ) 		 
+				, COALESCE( #{lastLoginTime}, '' ) 		
+				, COALESCE( #{masterUserName}, '' ) 		
+				, COALESCE( #{employeeID}, '' )				 
+				, #{createBy}
+				, #{registerDate}
+				, #{registerTime}
+				, #{updateDate}
+				, #{updateTime}
+				, #{updateBy}			
+			)
+		]]>
+	</insert>
+
+	<update id="updateUserInfo">
+		<![CDATA[
+			UPDATE  USER_INFO 
+				SET  USER_STATUS 		= COALESCE( #{userStatus}, USER_STATUS ) 			
+				, USER_PASSWORD 		= COALESCE( #{userPassword}	, USER_PASSWORD )		
+				, PASSWORD_CHANGE_DATE 	= COALESCE( #{passwordChangeDate}, PASSWORD_CHANGE_DATE )
+				, PASSWORD_CHANGE_TIME 	= COALESCE( #{passwordChangeTime}, PASSWORD_CHANGE_TIME )
+				, FIRST_LOGIN_DATE 		= COALESCE(	#{firstLoginDate}, FIRST_LOGIN_DATE )
+				, FIRST_LOGIN_TIME 		= COALESCE( #{firstLoginTime} , FIRST_LOGIN_TIME )	
+				, LAST_LOGIN_DATE 		= COALESCE( #{lastLoginDate}, LAST_LOGIN_DATE ) 
+				, LAST_LOGIN_TIME 		= COALESCE( #{lastLoginTime}, LAST_LOGIN_TIME )	
+				, MASTER_USER_NAME 		= COALESCE( #{masterUserName}, MASTER_USER_NAME )	
+				, EMPLOYEE_ID			= COALESCE( #{employeeID} , EMPLOYEE_ID )	
+				, UPDATE_DATE 			= #{updateDate}	
+				, UPDATE_TIME 			= #{updateTime}	
+				, UPDATE_BY				= #{updateBy}
+			WHERE USER_NAME =  #{userName}
+			AND  USER_TYPE = #{userType} 
+		]]>
+	</update>
+	
+	<select id="retrieveUserInfo"  resultType="DataUtil">
+		<![CDATA[
+			SELECT 	
+				  USER_NAME 			AS "userName"
+				, USER_TYPE 			AS "userType" 
+			  	, USER_STATUS 			AS "userStatus"		
+				, USER_PASSWORD 		AS "userPassword"	
+				, PASSWORD_CHANGE_DATE 	AS "passwordChangeDate"
+				, PASSWORD_CHANGE_TIME 	AS "passwordChangeTime"
+				, FIRST_LOGIN_DATE 		AS "firstLoginDate"
+				, FIRST_LOGIN_TIME 		AS "firstLoginTime"	
+				, LAST_LOGIN_DATE 		AS "lastLoginDate"
+				, LAST_LOGIN_TIME 		AS "lastLoginTime"	
+				, MASTER_USER_NAME 		AS "masterUserName"
+				, EMPLOYEE_ID			AS "employeeID"
+				, CREATE_BY				AS "createBy"
+				, REGISTER_DATE 		AS "registerDate"
+				, REGISTER_TIME 		AS "registerTime"
+				, UPDATE_DATE 			AS "updateDate"
+				, UPDATE_TIME 			AS "updateTime"
+				, UPDATE_BY				AS "updateBy"
+			FROM USER_INFO
+			WHERE USER_NAME      = #{userName}
+				AND  USER_TYPE   = COALESCE( #{userType} , USER_TYPE )
+				AND  USER_STATUS = COALESCE( #{userStatus} , USER_STATUS )
+		]]>
+	</select>
+	
+</mapper>

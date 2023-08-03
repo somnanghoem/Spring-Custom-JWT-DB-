@@ -4,6 +4,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +41,7 @@ public class UserManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/get-user")
-	public ResponseData<DataUtil> getUserInformation( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> getUserInformation( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -85,7 +86,7 @@ public class UserManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/get-list-user")
-	public ResponseData<DataUtil> getListUserInformation( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> getListUserInformation( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();

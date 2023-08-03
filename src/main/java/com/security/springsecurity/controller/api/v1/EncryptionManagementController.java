@@ -16,6 +16,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,7 +57,7 @@ public class EncryptionManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/rsa")
-	public ResponseData<DataUtil> rSAEncryption( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> rSAEncryption( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -100,7 +101,7 @@ public class EncryptionManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/sha512")
-	public ResponseData<DataUtil> sha512Encryption( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> sha512Encryption( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -137,7 +138,7 @@ public class EncryptionManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/sha256")
-	public ResponseData<DataUtil> sha256Encryption( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> sha256Encryption( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();

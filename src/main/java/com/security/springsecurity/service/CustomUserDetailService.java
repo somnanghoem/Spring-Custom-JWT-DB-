@@ -7,31 +7,34 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.security.springsecurity.util.data.DataUtil;
+import com.security.springsecurity.util.encryption.Sha256Util;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {
 	
 	@Autowired
-	private FakeUserInformation fakeUserInformation;
+	private UserInfoManagementService userInfoManagementService;
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-		
 		DataUtil userInfo = new DataUtil();
 		try {
-			userInfo = fakeUserInformation.getUseInfoByUserName ( username );
+			userInfo = userInfoManagementService.getUseInfoByUserName ( username );
 		} catch ( Exception e) {
 			throw new UsernameNotFoundException("User not found + " + username );
 		}
 		if ( userInfo != null ) {
-			String password = bCryptPasswordEncoder.encode( userInfo.getString("password") );
-			return new User( username, String.valueOf( password ), new ArrayList<>() );
+			try {
+				String password = Sha256Util.encrypt( userInfo.getString("userPassword") , username );
+				return new User( username, String.valueOf( password ), new ArrayList<>() );
+			} catch ( Exception e) {
+				throw new UsernameNotFoundException("User not found + " + username );
+			}
+			
 		} else {
 			throw new UsernameNotFoundException("User not found + " + username );
 		}

@@ -48,6 +48,7 @@ import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -119,7 +120,7 @@ public class FileManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/read-text")
-	public ResponseData<DataUtil> readTextFile( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> readTextFile( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -188,7 +189,7 @@ public class FileManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/upload-text-file")
-	public ResponseData<DataUtil> uploadTextFile( RequestData<DataUtil> param ) throws Exception, IOException {
+	public ResponseData<DataUtil> uploadTextFile( @RequestBody RequestData<DataUtil> param ) throws Exception, IOException {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -239,7 +240,7 @@ public class FileManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/read-excel")
-	public ResponseData<DataUtil> readExcelFile( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> readExcelFile( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -364,7 +365,7 @@ public class FileManagementController {
 	 * @fullPath 
 	 */
 	@PostMapping("/upload-excel")
-	public ResponseData<DataUtil> uploadExcelFile( RequestData<DataUtil> param ) throws Exception{
+	public ResponseData<DataUtil> uploadExcelFile( @RequestBody RequestData<DataUtil> param ) throws Exception{
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -501,7 +502,7 @@ public class FileManagementController {
 	 */
 	@PostMapping("/read-json")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ResponseData<DataUtil> readJsonFile( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> readJsonFile( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -583,7 +584,7 @@ public class FileManagementController {
 	 */
 	@PostMapping("/upload-json")
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public ResponseData<DataUtil> uploadJsonFile( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> uploadJsonFile( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
@@ -659,7 +660,7 @@ public class FileManagementController {
 	 */
 	@SuppressWarnings("resource")
 	@PostMapping("/read-upload-image")
-	public ResponseData<DataUtil> readUploadImage( RequestData<DataUtil> param ) throws Exception {
+	public ResponseData<DataUtil> readUploadImage( @RequestBody RequestData<DataUtil> param ) throws Exception {
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();

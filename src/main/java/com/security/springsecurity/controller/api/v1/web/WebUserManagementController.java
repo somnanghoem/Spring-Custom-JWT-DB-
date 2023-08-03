@@ -1,5 +1,5 @@
 /*-----------------------------------------------------------------------------------------
- * NAME : GenerateSequenceNumberController.java
+ * NAME : WebUserManagementController.java
  * VER  : v0.1
  * PROJ : spring-security
  * Copyright 2023
@@ -8,9 +8,9 @@
  *-----------------------------------------------------------------------------------------
  *   DATE        AUTHOR         DESCRIPTION                        
  * ----------  --------------  ------------------------------------------------------------
- * 2023-07-31   Hoem Somnang          creation
+ * 2023-08-03   Hoem Somnang          creation
  *---------------------------------------------------------------------------------------*/
-package com.security.springsecurity.controller.api.v1;
+package com.security.springsecurity.controller.api.v1.web;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
@@ -21,15 +21,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.security.springsecurity.service.GenerateSequenceManagementService;
+import com.security.springsecurity.service.v1.web.WebUserManagementService;
 import com.security.springsecurity.util.data.DataUtil;
-import com.security.springsecurity.util.date.DateUtil;
 import com.security.springsecurity.util.request.RequestData;
 import com.security.springsecurity.util.response.ResponseData;
 import com.security.springsecurity.util.response.ResponseHeader;
 import com.security.springsecurity.util.resultmessage.ResponseMessageTypeCode;
-import com.security.springsecurity.util.type.SequenceCodeName;
-import com.security.springsecurity.util.type.SequenceNoDigit;
 import com.security.springsecurity.util.type.YnTypeCode;
 
 /**
@@ -37,50 +34,44 @@ import com.security.springsecurity.util.type.YnTypeCode;
 *  -- detail description --
 * </PRE>
 *
-* @logicalName GenerateSequenceNumberController
-* @version   0.1, 2023-07-31
+* @logicalName WebUserManagementController
+* @version   0.1, 2023-08-03
 */
 
 @RestController
-@RequestMapping("/api/v1/sequence")
-public class GenerateSequenceNumberController {
-	
+@RequestMapping("/api/v1/web/user")
+public class WebUserManagementController {
+
 	@Autowired
-	private GenerateSequenceManagementService generateSequenceManagementService;
-	private final static Logger logger = LoggerFactory.getLogger( GenerateSequenceNumberController.class );
-	
+	private WebUserManagementService webUserManagementService;
+	private Logger logger = LoggerFactory.getLogger( WebUserManagementController.class );
 	/**
-	 * -- Generate Commit SeqNo --
+	 * -- Register Web User Information --
 	 *
 	 * @serviceID 
 	 * @logicalName 
-	 * @param requestData
+	 * @param param
+	 *   	String	userName
+	 * 		String	userType
+	 * 		String	userPassword
+	 * 		String	masterUserName
 	 * @return
 	 * @throws Exception
 	 * @exception 
 	 * @fullPath 
 	 */
-	@PostMapping("/commit")
-	public ResponseData<DataUtil> generateCommitSeqNo( @RequestBody RequestData<DataUtil> requestData ) throws Exception {
+	@PostMapping("/register")
+	public ResponseData<DataUtil> registerUserInfo( @RequestBody RequestData<DataUtil> param ) throws Exception{
 		
 		DataUtil body = new DataUtil();
 		String successYN = YnTypeCode.YES.getValue();
 		String resultCode = ResponseMessageTypeCode.SUCCESS.getResultCode();
 		String resultMessage = ResponseMessageTypeCode.SUCCESS.getResultMessage();
-		
 		try {
-			logger.error(">>>>>>>>>>> Generate Commit SeqNo Start >>>>>>>>>>" );
-			DataUtil param = new DataUtil();
-			param.setString("seqNoCode", SequenceCodeName.TELEGRAM_SEQNO.getCode() );
-			param.setString("seqNoName", SequenceCodeName.TELEGRAM_SEQNO.getName() );
-			param.setString("seqNoUniqueCode", DateUtil.getCurrentFormatDate( DateUtil.DATE ) );
-			param.setString("userName", "system" );
-			param.setLong("seqNoDigit", SequenceNoDigit.EIGHT.getValue() );
-			param.setLong("seqNoStart", 1L );
-			param.setLong("seqNoEnd", 99999999L );
-			String seqNo = generateSequenceManagementService.generateCommitSeqNo(param);
-			body.setString("seqNo", seqNo);
-			logger.error(">>>>>>>>>>> Generate Commit SeqNo end >>>>>>>>>>"  );
+			logger.error(">>>>>>>>>>> Register User Info controller start >>>>>>>>>>"  );
+			webUserManagementService.registerUserInformation( param.getBody() );
+			successYN = YnTypeCode.YES.getValue();
+			logger.error(">>>>>>>>>>> Register User Info controller end >>>>>>>>>>" );
 		} catch ( Exception e ) {
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
@@ -92,13 +83,10 @@ public class GenerateSequenceNumberController {
 				resultCode = resultMessageTypeCode.getResultCode();
 				resultMessage = resultMessageTypeCode.getResultMessage();
 			}
-			logger.error(">>>>>>>>>>> Generate Commit SeqNo error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			logger.error(">>>>>>>>>>> Register User Info controller error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 		}
-		
-		logger.debug(">>>>>>>>>> getUserInformation end >>>>>>>>>>");
+		body.setString("successYN", successYN );
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
-		
 	}
-
 }
