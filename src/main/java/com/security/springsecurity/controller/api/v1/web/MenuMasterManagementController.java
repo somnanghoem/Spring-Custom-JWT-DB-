@@ -80,7 +80,7 @@ public class MenuMasterManagementController {
 				resultCode = resultMessageTypeCode.getResultCode();
 				resultMessage = resultMessageTypeCode.getResultMessage();
 			}
-			logger.error(">>>>>>>>>>> Generate Commit SeqNo error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			logger.error(">>>>>>>>>>> register menu master controller error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 		}
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
