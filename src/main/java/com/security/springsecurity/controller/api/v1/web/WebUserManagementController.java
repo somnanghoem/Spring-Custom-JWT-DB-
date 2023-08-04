@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.springsecurity.service.UserErrorLogManagementService;
 import com.security.springsecurity.service.v1.web.WebUserManagementService;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.request.RequestData;
@@ -44,6 +45,8 @@ public class WebUserManagementController {
 
 	@Autowired
 	private WebUserManagementService webUserManagementService;
+	@Autowired
+	private UserErrorLogManagementService userErrorLogManagementService;
 	private Logger logger = LoggerFactory.getLogger( WebUserManagementController.class );
 	/**
 	 * -- Register Web User Information --
@@ -84,6 +87,10 @@ public class WebUserManagementController {
 				resultMessage = resultMessageTypeCode.getResultMessage();
 			}
 			logger.error(">>>>>>>>>>> Register User Info controller error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		body.setString("successYN", successYN );
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);

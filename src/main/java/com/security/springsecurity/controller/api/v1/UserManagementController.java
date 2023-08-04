@@ -3,12 +3,14 @@ package com.security.springsecurity.controller.api.v1;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.springsecurity.controller.token.v1.TokenEndPointController;
+import com.security.springsecurity.service.UserErrorLogManagementService;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.data.ListDataUtil;
 import com.security.springsecurity.util.request.RequestData;
@@ -21,6 +23,8 @@ import com.security.springsecurity.util.type.YnTypeCode;
 @RequestMapping("/api/v1/user")
 public class UserManagementController {
 
+	@Autowired
+	private UserErrorLogManagementService userErrorLogManagementService;
 	private static final Logger logger  = LoggerFactory.getLogger( TokenEndPointController.class);
 	
 	
@@ -59,8 +63,19 @@ public class UserManagementController {
 		} catch ( Exception e ) {
 			logger.error(">>>>>>>>>> retrieve user infor error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			logger.error(">>>>>>>>>>> Generate Commit SeqNo error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.debug(">>>>>>>>>> getUserInformation end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -109,8 +124,19 @@ public class UserManagementController {
 		} catch ( Exception e ) {
 			logger.error(">>>>>>>>>> retrieve list user infor error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			logger.error(">>>>>>>>>>> Generate Commit SeqNo error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.debug(">>>>>>>>>> getListUserInformation end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);

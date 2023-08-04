@@ -15,11 +15,13 @@ package com.security.springsecurity.controller.api.v1;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.springsecurity.service.UserErrorLogManagementService;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.encryption.RSAKeyPair;
 import com.security.springsecurity.util.encryption.RSAUtil;
@@ -43,6 +45,8 @@ import com.security.springsecurity.util.type.YnTypeCode;
 @RequestMapping("/api/v1/encryption")
 public class EncryptionManagementController {
 	
+	@Autowired
+	private UserErrorLogManagementService userErrorLogManagementService;
 	private final static Logger logger = LoggerFactory.getLogger( EncryptionManagementController.class );
 	
 	/**
@@ -80,8 +84,18 @@ public class EncryptionManagementController {
 			e.printStackTrace();
 			logger.error(">>>>>>>>>>> using RSA encryption error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> using RSA encryption end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -118,8 +132,18 @@ public class EncryptionManagementController {
 			e.printStackTrace();
 			logger.error(">>>>>>>>>>> using sha512 encryption error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> using sha512 encryption end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -155,8 +179,18 @@ public class EncryptionManagementController {
 			e.printStackTrace();
 			logger.error(">>>>>>>>>>> using sha256 encryption error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> using sha256 encryption end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);

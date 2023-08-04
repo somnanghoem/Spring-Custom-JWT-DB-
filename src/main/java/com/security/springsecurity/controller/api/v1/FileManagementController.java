@@ -47,11 +47,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.springsecurity.service.UserErrorLogManagementService;
 import com.security.springsecurity.util.currency.CurrencyUtil;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.data.ListDataUtil;
@@ -78,6 +80,8 @@ import com.security.springsecurity.util.type.YnTypeCode;
 @RequestMapping("/api/v1/file")
 public class FileManagementController {
 
+	@Autowired
+	private UserErrorLogManagementService userErrorLogManagementService;
 	private final static Logger logger = LoggerFactory.getLogger( FileManagementController.class );
 	// Text File
 	private final static String TXT_READ		 = "read";
@@ -168,8 +172,18 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> read text file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> read text file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -218,8 +232,18 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> upload text file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> upload text file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -344,8 +368,18 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> read excel file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> read excel file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -479,8 +513,18 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> upload excel file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> upload excel file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -562,8 +606,18 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> read json file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> read json file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -638,8 +692,18 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> upload json file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> upload json file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
@@ -724,8 +788,18 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> Read Upload Image file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-			resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			if ( e.getMessage().length() > 4 ) {
+				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
+				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
+			} else {
+				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
+				resultCode = resultMessageTypeCode.getResultCode();
+				resultMessage = resultMessageTypeCode.getResultMessage();
+			}
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.error(">>>>>>>>>>> Read Upload Image file end >>>>>>>>>>");
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);

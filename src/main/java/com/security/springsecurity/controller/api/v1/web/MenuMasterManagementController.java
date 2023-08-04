@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.security.springsecurity.service.UserErrorLogManagementService;
 import com.security.springsecurity.service.v1.web.MenuMasterManagementService;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.request.RequestData;
@@ -43,6 +44,7 @@ public class MenuMasterManagementController {
 
 	@Autowired
 	private MenuMasterManagementService menuMasterManagementService;
+	private UserErrorLogManagementService userErrorLogManagementService;
 	private final static Logger logger = LoggerFactory.getLogger( MenuMasterManagementController.class );
 	
 	/**
@@ -81,7 +83,12 @@ public class MenuMasterManagementController {
 				resultMessage = resultMessageTypeCode.getResultMessage();
 			}
 			logger.error(">>>>>>>>>>> register menu master controller error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
+		
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
 	}

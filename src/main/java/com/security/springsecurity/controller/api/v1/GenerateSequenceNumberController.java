@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.security.springsecurity.service.GenerateSequenceManagementService;
+import com.security.springsecurity.service.UserErrorLogManagementService;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.date.DateUtil;
 import com.security.springsecurity.util.request.RequestData;
@@ -45,6 +46,8 @@ import com.security.springsecurity.util.type.YnTypeCode;
 @RequestMapping("/api/v1/sequence")
 public class GenerateSequenceNumberController {
 	
+	@Autowired
+	private UserErrorLogManagementService userErrorLogManagementService;
 	@Autowired
 	private GenerateSequenceManagementService generateSequenceManagementService;
 	private final static Logger logger = LoggerFactory.getLogger( GenerateSequenceNumberController.class );
@@ -93,6 +96,10 @@ public class GenerateSequenceNumberController {
 				resultMessage = resultMessageTypeCode.getResultMessage();
 			}
 			logger.error(">>>>>>>>>>> Generate Commit SeqNo error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( requestData , resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		
 		logger.debug(">>>>>>>>>> getUserInformation end >>>>>>>>>>");
