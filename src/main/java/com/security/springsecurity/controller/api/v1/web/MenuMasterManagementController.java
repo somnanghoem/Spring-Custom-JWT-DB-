@@ -68,27 +68,21 @@ public class MenuMasterManagementController {
 		try {
 			logger.debug(">>>>>>>>>> register menu master controller start >>>>>>>>>>");
 			menuMasterManagementService.registerMenuMasterInfo( param.getBody() );
-			body.setString("successYN", YnTypeCode.YES.getValue());
 			logger.debug(">>>>>>>>>> register menu master controller end >>>>>>>>>>");
 		} catch ( Exception e ) {
-			body = new DataUtil();
-			body.setString("successYN", YnTypeCode.NO.getValue());
-			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
 			logger.error(">>>>>>>>>>> register menu master controller error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			body = new DataUtil();
+			successYN = YnTypeCode.NO.getValue();
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/
 			userErrorLogManagementService.registerUserErrorLogInfo( param, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		
+		body.setString("successYN", successYN );
 		ResponseHeader header = new ResponseHeader(successYN, resultCode, resultMessage);
 		return new ResponseData<DataUtil>(header, body);
 	}

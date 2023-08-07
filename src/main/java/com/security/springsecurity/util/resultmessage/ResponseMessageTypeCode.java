@@ -1,5 +1,7 @@
 package com.security.springsecurity.util.resultmessage;
 
+import com.security.springsecurity.util.data.DataUtil;
+
 public enum ResponseMessageTypeCode {
 	
 	SUCCESS 			( "1000", "Success" ),
@@ -66,6 +68,29 @@ public enum ResponseMessageTypeCode {
 		} 
 		return resultConst;
 		
+	}
+	
+	/**
+	 * -- detail description --
+	 *
+	 * @serviceID 
+	 * @logicalName 
+	 * @param errorCode
+	 * @return
+	 * @exception 
+	 * @fullPath 
+	 */
+	public static DataUtil prepareErrorResult( String errorCode ) {
+		DataUtil outputData = new DataUtil();
+		if ( errorCode.length() > 4 ) {
+			outputData.setString("resultCode", ResponseMessageTypeCode.GENERAL_ERROR.getResultCode());
+			outputData.setString("resultMessage", ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage());
+		} else {
+			ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage( errorCode );
+			outputData.setString("resultCode", resultMessageTypeCode.getResultCode() );
+			outputData.setString("resultMessage", resultMessageTypeCode.getResultMessage() );
+		}
+		return outputData;
 	}
 	
 

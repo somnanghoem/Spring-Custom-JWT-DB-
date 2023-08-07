@@ -85,17 +85,12 @@ public class GenerateSequenceNumberController {
 			body.setString("seqNo", seqNo);
 			logger.error(">>>>>>>>>>> Generate Commit SeqNo end >>>>>>>>>>"  );
 		} catch ( Exception e ) {
+			logger.error(">>>>>>>>>>> Generate Commit SeqNo error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
-			logger.error(">>>>>>>>>>> Generate Commit SeqNo error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/

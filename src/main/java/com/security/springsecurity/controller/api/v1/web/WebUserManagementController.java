@@ -76,17 +76,12 @@ public class WebUserManagementController {
 			successYN = YnTypeCode.YES.getValue();
 			logger.error(">>>>>>>>>>> Register User Info controller end >>>>>>>>>>" );
 		} catch ( Exception e ) {
+			logger.error(">>>>>>>>>>> Register User Info controller error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
-			logger.error(">>>>>>>>>>> Register User Info controller error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/

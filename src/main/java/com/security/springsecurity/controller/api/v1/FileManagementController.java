@@ -172,14 +172,9 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> read text file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/
@@ -232,14 +227,9 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> upload text file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/
@@ -368,14 +358,9 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> read excel file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/
@@ -513,14 +498,9 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> upload excel file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/
@@ -606,14 +586,9 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> read json file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/
@@ -692,14 +667,9 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> upload json file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/
@@ -788,14 +758,9 @@ public class FileManagementController {
 			logger.error(">>>>>>>>>>> Read Upload Image file error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
 			/*============================================
 			 * Every controller must to call this Service 
 			 *============================================*/

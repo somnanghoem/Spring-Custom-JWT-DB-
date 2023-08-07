@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.security.springsecurity.config.util.JwtTokenUtil;
 import com.security.springsecurity.dao.JwtUserDAO;
+import com.security.springsecurity.service.UserErrorLogManagementService;
 import com.security.springsecurity.service.UserInfoManagementService;
 import com.security.springsecurity.util.data.DataUtil;
 import com.security.springsecurity.util.encryption.Sha256Util;
@@ -47,6 +48,8 @@ public class TokenEndPointController {
 	private JwtTokenUtil jwtTokenUtil;
 	@Autowired
 	private UserInfoManagementService userInfoManagementService;
+	@Autowired
+	private UserErrorLogManagementService userErrorLogManagementService;
 	private static final Logger logger  = LoggerFactory.getLogger( TokenEndPointController.class);
 	/**
 	 * -- Generate User Token --
@@ -151,14 +154,13 @@ public class TokenEndPointController {
 			logger.error(">>>>>>>>>> get token error >>>>>>>>>>" + ExceptionUtils.getStackTrace(e) );
 			body = new DataUtil();
 			successYN = YnTypeCode.NO.getValue();
-			if ( e.getMessage().length() > 4 ) {
-				resultCode = ResponseMessageTypeCode.GENERAL_ERROR.getResultCode();
-				resultMessage = ResponseMessageTypeCode.GENERAL_ERROR.getResultMessage();
-			} else {
-				ResponseMessageTypeCode resultMessageTypeCode = ResponseMessageTypeCode.getResultMessage(  e.getMessage() );
-				resultCode = resultMessageTypeCode.getResultCode();
-				resultMessage = resultMessageTypeCode.getResultMessage();
-			}
+			DataUtil errorResult = ResponseMessageTypeCode.prepareErrorResult( e.getMessage() );
+			resultCode = errorResult.getString("resultCode");
+			resultMessage = errorResult.getString("resultMessage");
+			/*============================================
+			 * Every controller must to call this Service 
+			 *============================================*/
+			userErrorLogManagementService.registerUserErrorLogInfo( requestData, resultCode, resultMessage, ExceptionUtils.getStackTrace(e) );
 		}
 		logger.debug(">>>>>>>>>> generate user token end >>>>>>>>>>");
 		// set header
